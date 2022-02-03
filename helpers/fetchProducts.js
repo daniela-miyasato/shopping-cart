@@ -7,7 +7,7 @@ const fetchProducts = async (product) => {
     const data = await response.json(); // '.json' transforma em objeto javascript (sem metadados)
     return data;
   } catch (error) {
-    console.log(`Tem um erro aqui! \n${error}`);
+    throw new Error('You must provide an url');
   }
 };
 
