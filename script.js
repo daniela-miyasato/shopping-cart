@@ -12,9 +12,20 @@ function createCustomElement(element, className, innerText) {
   return e;
 }
 
+function cartItemClickListener(event) {
+  // coloque seu código aqui
+}
+
+function createCartItemElement({ id: sku, title: name, price: salePrice }) {
+  const li = document.createElement('li');
+  li.className = 'cart__item';
+  li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
+  li.addEventListener('click', cartItemClickListener);
+  return li;
+}
+
 // função para add o produto selecionado no carrinho.
 async function addItemToCart(event) {
-  console.log('testando');
   const olCart = document.querySelector('.cart__items');
   const getId = event.target.parentNode.firstChild.innerText;
   const produto = await fetchItem(getId);
@@ -28,10 +39,9 @@ function createProductItemElement({ id: sku, title: name, thumbnail: image }) {
   section.appendChild(createCustomElement('span', 'item__sku', sku));
   section.appendChild(createCustomElement('span', 'item__title', name));
   section.appendChild(createProductImageElement(image));
-  const botaoAdd = createCustomElement('button', 'item__add', 'Adicionar ao carrinho!');
-  botaoAdd.addEventListener('click', addItemToCart);
-  section.appendChild(botaoAdd);
-
+  const addBtn = createCustomElement('button', 'item__add', 'Adicionar ao carrinho!');
+  addBtn.addEventListener('click', addItemToCart); // add evento no botão
+  section.appendChild(addBtn);
   return section;
 }
  
@@ -50,28 +60,6 @@ function getSkuFromProductItem(item) {
   return item.querySelector('span.item__sku').innerText;
 }
 
-function cartItemClickListener(event) {
-  // coloque seu código aqui
-}
-
-function createCartItemElement({ id: sku, title: name, price: salePrice }) {
-  const li = document.createElement('li');
-  li.className = 'cart__item';
-  li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
-  li.addEventListener('click', cartItemClickListener);
-  return li;
-}
-
-// precisa pegar os botoes de "adicionar ao carrinho" de cada item
-// function buttonFunction() {
-//   const allAddBtn = [...document.getElementsByClassName('item__add')];
-//   console.log(allAddBtn);
-//   allAddBtn.forEach((element) => {
-//     element.addEventListener('click', addItemToCart);
-//   });
-// }
-
 window.onload = () => {
   createCardItems();
-  // buttonFunction();
  };
