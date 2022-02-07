@@ -57,15 +57,30 @@ function createProductItemElement({ id: sku, title: name, thumbnail: image }) {
   section.appendChild(addBtn);
   return section;
 }
- 
+
+function addLoading() {
+  const container = document.querySelector('.container');
+  const div = document.createElement('div');
+  div.className = 'loading';
+  div.innerText = 'carregando...';
+  container.appendChild(div);
+}
+
+function removeLoading() {
+  const message = document.querySelector('.loading');
+  message.remove(); // https://developer.mozilla.org/en-US/docs/Web/API/Element/remove
+}
+
 // adiciona os produtos na página html
 async function createCardItems() {
   const section = document.querySelector('.items');
+  addLoading();
   const products = await fetchProducts('computador');
   const { results } = products; 
     results.forEach((element) => {
       section.appendChild(createProductItemElement(element));
     });
+    removeLoading();
 }
 
 // recarrega os produtos do carrinho ao atualizar a página
