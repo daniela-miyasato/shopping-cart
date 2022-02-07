@@ -36,13 +36,30 @@ function createCartItemElement({ id: sku, title: name, price: salePrice }) {
   return li;
 }
 
+// Requisito 7
+function addLoading() {
+  const container = document.querySelector('.container');
+  const div = document.createElement('div');
+  div.className = 'loading';
+  div.innerText = 'carregando...';
+  container.appendChild(div);
+}
+
+// Requisito 7
+function removeLoading() {
+  const message = document.querySelector('.loading');
+  message.remove(); // https://developer.mozilla.org/en-US/docs/Web/API/Element/remove
+}
+
 // função para add o produto selecionado no carrinho.
 async function addItemToCart(event) {
   // cart = document.querySelector('.cart__items');
   const getId = event.target.parentNode.firstChild.innerText;
+  addLoading();
   const produto = await fetchItem(getId);
   cart.appendChild(createCartItemElement(produto));
   saveCartItems(cart.innerHTML); // salva o carrinho atualizado no local storage
+  removeLoading();
 }
 
 function createProductItemElement({ id: sku, title: name, thumbnail: image }) {
@@ -56,19 +73,6 @@ function createProductItemElement({ id: sku, title: name, thumbnail: image }) {
   addBtn.addEventListener('click', addItemToCart); // add evento no botão
   section.appendChild(addBtn);
   return section;
-}
-
-function addLoading() {
-  const container = document.querySelector('.container');
-  const div = document.createElement('div');
-  div.className = 'loading';
-  div.innerText = 'carregando...';
-  container.appendChild(div);
-}
-
-function removeLoading() {
-  const message = document.querySelector('.loading');
-  message.remove(); // https://developer.mozilla.org/en-US/docs/Web/API/Element/remove
 }
 
 // adiciona os produtos na página html
