@@ -68,6 +68,10 @@ async function createCardItems() {
     });
 }
 
+function returnInfosFromLocalStorage() {
+  cart.innerHTML = localStorage.getItem('cartItems');
+}
+
 function getSkuFromProductItem(item) {
   return item.querySelector('span.item__sku').innerText;
 }
@@ -75,5 +79,6 @@ function getSkuFromProductItem(item) {
 window.onload = () => {
   createCardItems();
   getSavedCartItems();
+  returnInfosFromLocalStorage();
   deleteFromLocalStorage();
  };
