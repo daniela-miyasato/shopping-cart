@@ -1,3 +1,5 @@
+const cart = document.querySelector('.cart__items'); // carrinho de compras
+
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
   img.className = 'item__image';
@@ -12,10 +14,18 @@ function createCustomElement(element, className, innerText) {
   return e;
 }
 
+// remove o produto clicado no carrinho
 function cartItemClickListener(event) {
   const selected = event.target;
-  const cart = document.querySelector('.cart__items');
+  // cart = document.querySelector('.cart__items');
   cart.removeChild(selected);
+  saveCartItems(cart.innerHTML); // salva o carrinho atualizado no local storage
+}
+
+// dps de recarregar a página, os produtos perdem a função de deletar ao clicar no mesmo. (infos vindas do local storage)
+function deleteFromLocalStorage() {
+  const carProducts = [...cart.children]; // pega cada item (https://stackoverflow.com/questions/222841/most-efficient-way-to-convert-an-htmlcollection-to-an-array)
+  carProducts.forEach((element) => element.addEventListener('click', cartItemClickListener));
 }
 
 function createCartItemElement({ id: sku, title: name, price: salePrice }) {
@@ -28,10 +38,11 @@ function createCartItemElement({ id: sku, title: name, price: salePrice }) {
 
 // função para add o produto selecionado no carrinho.
 async function addItemToCart(event) {
-  const olCart = document.querySelector('.cart__items');
+  // cart = document.querySelector('.cart__items');
   const getId = event.target.parentNode.firstChild.innerText;
   const produto = await fetchItem(getId);
-  olCart.appendChild(createCartItemElement(produto));
+  cart.appendChild(createCartItemElement(produto));
+  saveCartItems(cart.innerHTML); // salva o carrinho atualizado no local storage
 }
 
 function createProductItemElement({ id: sku, title: name, thumbnail: image }) {
@@ -52,10 +63,9 @@ async function createCardItems() {
   const section = document.querySelector('.items');
   const products = await fetchProducts('computador');
   const { results } = products; 
-
-  results.forEach((element) => {
-    section.appendChild(createProductItemElement(element));
-  });
+    results.forEach((element) => {
+      section.appendChild(createProductItemElement(element));
+    });
 }
 
 function getSkuFromProductItem(item) {
@@ -64,4 +74,6 @@ function getSkuFromProductItem(item) {
 
 window.onload = () => {
   createCardItems();
+  getSavedCartItems();
+  deleteFromLocalStorage();
  };
