@@ -105,6 +105,24 @@ button.addEventListener('click', () => {
 });
 }
 
+// https://medium.com/@rodrigoum/3-maneiras-de-pegar-o-primeiro-e-%C3%BAltimo-elemento-de-um-array-com-javascript-56e92e6bf3f4
+// pega os produtos do carrinho => separa (split) a descrição por espaços => pega o último elemento (.length-1) => retorna array com os valores e '$' => retira o '$'(replace)=> transforma em número (parseFloat) => soma!
+function totalSum() {
+  const products = [...cart.children]; // pega os produtos do carrinho
+
+  const allValues = products.map((eachProduct) => {
+    const split = eachProduct.innerText.split(' '); 
+    const lastSplit = split[split.length - 1];
+    return lastSplit;
+  });
+
+  const result = allValues.reduce((acc, curr) => {
+  return acc + parseFloat(curr.replace('$', ''));
+  }, 0);
+
+  return result;
+}
+
 window.onload = () => {
   createCardItems();
   getSavedCartItems();
