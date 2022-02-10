@@ -1,4 +1,33 @@
 const cart = document.querySelector('.cart__items'); // carrinho de compras
+const cartSpan = document.querySelector('.total-price');
+
+// https://medium.com/@rodrigoum/3-maneiras-de-pegar-o-primeiro-e-%C3%BAltimo-elemento-de-um-array-com-javascript-56e92e6bf3f4
+// https://pt.stackoverflow.com/questions/134453/como-converter-uma-string-para-int-em-javascript
+// pega os produtos do carrinho => separa (split) a descrição por espaços => pega o último elemento (.length-1) => retorna array com os valores e '$' => retira o '$'(replace)=> transforma em número (parseFloat) => soma!
+const totalSum = () => { // soma os valores do carrinho
+  const products = [...cart.children]; // pega os produtos do carrinho
+
+  const allValues = products.map((eachProduct) => {
+    const split = eachProduct.innerText.split(' '); 
+    const lastSplit = split[split.length - 1];
+    return lastSplit;
+  });
+
+  const result = allValues.reduce((acc, curr) =>
+  acc + parseFloat(curr.replace('$', '')), 0);
+  // console.log(result);
+  return (Number(result.toFixed(2)));
+};
+
+// atualiza os valores do Sub-total
+function getPrices() {
+  cartSpan.innerHTML = totalSum();
+}
+
+const total = () => {
+  totalSum();
+  getPrices();
+};
 
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
@@ -20,6 +49,7 @@ function cartItemClickListener(event) {
   // cart = document.querySelector('.cart__items');
   cart.removeChild(selected);
   saveCartItems(cart.innerHTML); // salva o carrinho atualizado no local storage
+  total();
 }
 
 // dps de recarregar a página, os produtos perdem a função de deletar ao clicar no mesmo. (infos vindas do local storage)
@@ -60,6 +90,7 @@ async function addItemToCart(event) {
   cart.appendChild(createCartItemElement(produto));
   saveCartItems(cart.innerHTML); // salva o carrinho atualizado no local storage
   removeLoading();
+  total();
 }
 
 function createProductItemElement({ id: sku, title: name, thumbnail: image }) {
@@ -90,11 +121,12 @@ async function createCardItems() {
 // recarrega os produtos do carrinho ao atualizar a página
 function returnInfosFromLocalStorage() {
   cart.innerHTML = localStorage.getItem('cartItems');
+  total();
 }
 
-function getSkuFromProductItem(item) {
-  return item.querySelector('span.item__sku').innerText;
-}
+// function getSkuFromProductItem(item) {
+//   return item.querySelector('span.item__sku').innerText;
+// }
 
 function emptyCart() {
 const button = document.querySelector('.empty-cart');
@@ -102,25 +134,8 @@ button.addEventListener('click', () => {
   cart.innerHTML = ''; 
   saveCartItems(cart.innerHTML); // salva o carrinho atualizado no local storage
   // localStorage.clear();
+  total();
 });
-}
-
-// https://medium.com/@rodrigoum/3-maneiras-de-pegar-o-primeiro-e-%C3%BAltimo-elemento-de-um-array-com-javascript-56e92e6bf3f4
-// pega os produtos do carrinho => separa (split) a descrição por espaços => pega o último elemento (.length-1) => retorna array com os valores e '$' => retira o '$'(replace)=> transforma em número (parseFloat) => soma!
-function totalSum() {
-  const products = [...cart.children]; // pega os produtos do carrinho
-
-  const allValues = products.map((eachProduct) => {
-    const split = eachProduct.innerText.split(' '); 
-    const lastSplit = split[split.length - 1];
-    return lastSplit;
-  });
-
-  const result = allValues.reduce((acc, curr) => {
-  return acc + parseFloat(curr.replace('$', ''));
-  }, 0);
-
-  return result;
 }
 
 window.onload = () => {
