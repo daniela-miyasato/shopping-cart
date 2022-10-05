@@ -1,8 +1,6 @@
 const cart = document.querySelector('.cart__items'); // carrinho de compras
 const cartSpan = document.querySelector('.total-price');
 
-// https://medium.com/@rodrigoum/3-maneiras-de-pegar-o-primeiro-e-%C3%BAltimo-elemento-de-um-array-com-javascript-56e92e6bf3f4
-// https://pt.stackoverflow.com/questions/134453/como-converter-uma-string-para-int-em-javascript
 // pega os produtos do carrinho => separa (split) a descrição por espaços => pega o último elemento (.length-1) => retorna array com os valores e '$' => retira o '$'(replace)=> transforma em número (parseFloat) => soma!
 const totalSum = () => { // soma os valores do carrinho
   const products = [...cart.children]; // pega os produtos do carrinho
@@ -54,7 +52,7 @@ function cartItemClickListener(event) {
 
 // dps de recarregar a página, os produtos perdem a função de deletar ao clicar no mesmo. (infos vindas do local storage)
 function deleteFromLocalStorage() {
-  const carProducts = [...cart.children]; // pega cada item (https://stackoverflow.com/questions/222841/most-efficient-way-to-convert-an-htmlcollection-to-an-array)
+  const carProducts = [...cart.children]; // pega cada item 
   carProducts.forEach((element) => element.addEventListener('click', cartItemClickListener));
 }
 
@@ -66,7 +64,6 @@ function createCartItemElement({ id: sku, title: name, price: salePrice }) {
   return li;
 }
 
-// Requisito 7
 function addLoading() {
   const container = document.querySelector('.container');
   const div = document.createElement('div');
@@ -75,7 +72,6 @@ function addLoading() {
   container.appendChild(div);
 }
 
-// Requisito 7
 function removeLoading() {
   const message = document.querySelector('.loading');
   message.remove(); // https://developer.mozilla.org/en-US/docs/Web/API/Element/remove
@@ -124,16 +120,11 @@ function returnInfosFromLocalStorage() {
   total();
 }
 
-// function getSkuFromProductItem(item) {
-//   return item.querySelector('span.item__sku').innerText;
-// }
-
 function emptyCart() {
 const button = document.querySelector('.empty-cart');
 button.addEventListener('click', () => {
   cart.innerHTML = ''; 
   saveCartItems(cart.innerHTML); // salva o carrinho atualizado no local storage
-  // localStorage.clear();
   total();
 });
 }
